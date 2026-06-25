@@ -6,7 +6,7 @@ app = Flask(__name__)
 def home():
     return {
         "message": "Hello from Cloud Run!",
-        "status": "Application is running successfully"
+        "status": "Application is running successfully and image is pushed to repository"
     }
 
 @app.route("/health")
