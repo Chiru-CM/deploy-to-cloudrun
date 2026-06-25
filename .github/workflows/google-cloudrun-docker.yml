@@ -6,7 +6,8 @@ on:
 env:
   PROJECT_ID: 'spheric-keel-500501-s7'
   REGION: 'us-central1'
-  SERVICE: 'flask-app'        
+  REPOSITORY: 'flaskrepos'
+  SERVICE: 'flask-app'      
 
 jobs:
   deploy:
@@ -31,7 +32,7 @@ jobs:
 
       - name: 'Build and Push Container'
         run: |-
-          DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}"
+          DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}"
           docker build --tag "${DOCKER_TAG}" .
           docker push "${DOCKER_TAG}"
           echo "DOCKER_TAG=${DOCKER_TAG}" >> "$GITHUB_ENV"
@@ -42,7 +43,7 @@ jobs:
         with:
           service: '${{ env.SERVICE }}'
           region: '${{ env.REGION }}'
-          image: '${{ env.DOCKER_TAG }}'
+          image: '${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}'
 
       - name: 'Show output'
         run: echo '${{ steps.deploy.outputs.url }}'
